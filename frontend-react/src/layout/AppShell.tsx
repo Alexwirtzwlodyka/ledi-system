@@ -1,12 +1,13 @@
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/context/AuthContext'
+import { lediTheme } from '../theme'
 
 const links = [
   ['/', 'Dashboard'],
   ['/escribanos', 'Escribanos'],
   ['/usuarios', 'Usuarios'],
   ['/adjuntos', 'Adjuntos'],
-  ['/auditoria', 'Auditoría'],
+  ['/auditoria', 'AuditorÃ­a'],
 ]
 
 export function AppShell() {
@@ -16,20 +17,35 @@ export function AppShell() {
   if (!user) return <Navigate to='/login' replace />
 
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr', background: '#f5f1e8' }}>
-      <aside style={{ borderRight: '1px solid #d8e1eb', padding: 20, background: '#fbfaf7' }}>
-        <h2 style={{ color: '#1f3a5f', marginTop: 0 }}>LeDi</h2>
-        <div style={{ color: '#5e718d', marginBottom: 20 }}>{user.username} · {user.role}</div>
+    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr', background: lediTheme.background }}>
+      <aside
+        style={{
+          borderRight: `1px solid ${lediTheme.border}`,
+          padding: 20,
+          background: lediTheme.surfaceAlt,
+          boxShadow: '0 0 24px rgba(91, 111, 46, 0.08)',
+        }}
+      >
+        <h2 style={{ color: lediTheme.title, marginTop: 0 }}>LeDi</h2>
+        <div style={{ color: lediTheme.textMuted, marginBottom: 20 }}>{user.username} Â· {user.role}</div>
         <nav style={{ display: 'grid', gap: 10 }}>
           {links.map(([to, label]) => (
-            <Link key={to} to={to} style={{ color: '#3567a6', textDecoration: 'none' }}>{label}</Link>
+            <Link key={to} to={to} style={{ color: lediTheme.link, textDecoration: 'none', fontWeight: 600 }}>{label}</Link>
           ))}
         </nav>
         <button
           onClick={() => { logout(); navigate('/login') }}
-          style={{ marginTop: 24, padding: '10px 14px', borderRadius: 10, border: '1px solid #c8d4e3', background: '#fff', cursor: 'pointer' }}
+          style={{
+            marginTop: 24,
+            padding: '10px 14px',
+            borderRadius: 10,
+            border: `1px solid ${lediTheme.border}`,
+            background: lediTheme.surface,
+            color: lediTheme.title,
+            cursor: 'pointer',
+          }}
         >
-          Cerrar sesión
+          Cerrar sesiÃ³n
         </button>
       </aside>
       <main style={{ padding: 24 }}>
