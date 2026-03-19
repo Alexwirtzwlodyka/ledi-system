@@ -1,4 +1,4 @@
-export interface UploadAdjuntoPayload { escribano_id: number; filename: string; content: string }
+export interface UploadAdjuntoPayload { escribano_id: number; filename: string; content: string; content_encoding?: 'plain' | 'base64' }
 
 export function buildAdjuntosListRequest(escribanoId: number) {
   return { method: 'GET' as const, url: `/adjuntos?escribano_id=${escribanoId}` }
@@ -8,7 +8,12 @@ export function buildAdjuntoUploadRequest(payload: UploadAdjuntoPayload) {
   return {
     method: 'POST' as const,
     url: '/adjuntos',
-    body: { escribano_id: payload.escribano_id, filename: payload.filename.trim(), content: payload.content },
+    body: {
+      escribano_id: payload.escribano_id,
+      filename: payload.filename.trim(),
+      content: payload.content,
+      content_encoding: payload.content_encoding ?? 'plain',
+    },
   }
 }
 

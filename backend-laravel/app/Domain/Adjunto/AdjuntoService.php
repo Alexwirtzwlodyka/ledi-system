@@ -19,7 +19,7 @@ final class AdjuntoService
         private AuthService $auth,
     ) {}
 
-    public function upload(int $escribanoId, string $fileName, string $content, int $actorUserId = 0, array $actor = []): array
+    public function upload(int $escribanoId, string $fileName, string $content, string $contentEncoding = 'plain', int $actorUserId = 0, array $actor = []): array
     {
         if (!$this->policy->canUpload($actor)) {
             return Response::error('No autorizado', 403);
@@ -28,15 +28,21 @@ final class AdjuntoService
             return Response::error('Escribano no encontrado', 404);
         }
         if (!str_ends_with(strtolower($fileName), '.pdf')) {
-            return Response::error('Sólo se permiten PDFs', 422);
+            return Response::error('SÃ³lo se permiten PDFs', 422);
         }
-        $encrypted = $this->crypto->encrypt($content, $this->key, 'adjunto:' . $escribanoId);
+
+        $binaryContent = $this->decodeContent($content, $contentEncoding);
+        if ($binaryContent === '') {
+            return Response::error('El adjunto estÃ¡ vacÃ­o o es invÃ¡lido', 422);
+        }
+
+        $encrypted = $this->crypto->encrypt($binaryContent, $this->key, 'adjunto:' . $escribanoId);
         $item = $this->repo->create([
             'escribano_id' => $escribanoId,
             'nombre_original' => $fileName,
             'mime_type' => 'application/pdf',
-            'tamano_bytes' => strlen($content),
-            'checksum_sha256' => hash('sha256', $content),
+            'tamano_bytes' => strlen($binaryContent),
+            'checksum_sha256' => hash('sha256', $binaryContent),
             'ciphertext' => $encrypted['ciphertext'],
             'nonce' => $encrypted['nonce'],
             'tag' => $encrypted['tag'],
@@ -59,7 +65,7 @@ final class AdjuntoService
         }
         if ($this->policy->requiresStepUpForDownload($actor)) {
             if ($stepUpToken === '' || !$this->auth->consumeStepUp($stepUpToken, $actorUserId, $ip, $userAgent)) {
-                return Response::error('Step-up requerido o inválido', 403);
+                return Response::error('Step-up requerido o invÃ¡lido', 403);
             }
         }
         $plain = $this->crypto->decrypt([
@@ -68,6 +74,21 @@ final class AdjuntoService
             'tag' => $item['tag'],
         ], $this->key, 'adjunto:' . $item['escribano_id']);
         $this->audit->log('ADJUNTO_DOWNLOADED', 'adjunto', (int) $item['id'], ['escribano_id' => $item['escribano_id']], $actorUserId ?: null);
-        return Response::success(['filename' => $item['nombre_original'], 'content' => $plain]);
+        return Response::success([
+            'filename' => $item['nombre_original'],
+            'mime_type' => $item['mime_type'],
+            'content' => base64_encode($plain),
+            'content_encoding' => 'base64',
+        ]);
+    }
+
+    private function decodeContent(string $content, string $contentEncoding): string
+    {
+        if ($contentEncoding !== 'base64') {
+            return $content;
+        }
+
+        $decoded = base64_decode($content, true);
+        return $decoded === false ? '' : $decoded;
     }
 }

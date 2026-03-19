@@ -16,9 +16,10 @@ assert.equal(users.body.username, 'op1')
 const query = buildEscribanosQuery({ search: ' Pérez ', dni: '30.111.222', estado: 'activo' })
 assert.equal(query, '/escribanos?search=P%C3%A9rez&dni=30111222&estado=activo')
 
-const adj = buildAdjuntoUploadRequest({ escribano_id: 7, filename: ' legajo.pdf ', content: '%PDF' })
+const adj = buildAdjuntoUploadRequest({ escribano_id: 7, filename: ' legajo.pdf ', content: '%PDF', content_encoding: 'base64' })
 assert.equal(adj.url, '/adjuntos')
 assert.equal(adj.body.filename, 'legajo.pdf')
+assert.equal(adj.body.content_encoding, 'base64')
 
 console.log('OK - project contracts frontend')
 
