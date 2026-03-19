@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { buildLoginRequest, buildStepUpRequest } from '../src/features/auth/api/authApi.mjs'
 import { buildEscribanosQuery } from '../src/features/escribanos/api/escribanosApi.mjs'
-import { buildCreateUserRequest } from '../src/features/users/api/usersApi.mjs'
+import { buildCreateUserRequest, buildDeleteUserRequest, buildUpdateUserRequest, buildUsersListRequest } from '../src/features/users/api/usersApi.mjs'
 import { buildAdjuntoUploadRequest, buildAdjuntoDownloadRequest } from '../src/features/adjuntos/api/adjuntosApi.mjs'
 import { buildAuditListRequest } from '../src/features/audit/api/auditApi.mjs'
 
@@ -9,9 +9,22 @@ const login = buildLoginRequest({ username: ' admin ', password: 'Admin.1234' })
 assert.equal(login.url, '/auth/login')
 assert.equal(login.body.username, 'admin')
 
-const users = buildCreateUserRequest({ username: ' op1 ', email: ' OP@MAIL.COM ', password: 'x', role: 'operador' })
+const users = buildCreateUserRequest({ username: ' op1 ', email: ' OP@MAIL.COM ', celular: ' 3804123456 ', password: 'x', role: 'operador' })
 assert.equal(users.body.email, 'op@mail.com')
 assert.equal(users.body.username, 'op1')
+assert.equal(users.body.celular, '3804123456')
+
+const usersList = buildUsersListRequest({ search: ' admin local ' })
+assert.equal(usersList.url, '/users?search=admin%20local')
+
+const updateUser = buildUpdateUserRequest({ user_id: 8, email: ' Nuevo@Mail.com ', celular: ' 3804 ', password: 'Clave.123', role: 'admin', is_active: true })
+assert.equal(updateUser.body.email, 'nuevo@mail.com')
+assert.equal(updateUser.body.celular, '3804')
+assert.equal(updateUser.body.password, 'Clave.123')
+
+const deleteUser = buildDeleteUserRequest(8)
+assert.equal(deleteUser.url, '/users/delete')
+assert.equal(deleteUser.body.user_id, 8)
 
 const query = buildEscribanosQuery({ search: ' Pérez ', dni: '30.111.222', estado: 'activo' })
 assert.equal(query, '/escribanos?search=P%C3%A9rez&dni=30111222&estado=activo')

@@ -16,13 +16,14 @@ final class UserService
         private UserPolicy $policy,
     ) {}
 
-    public function index(): array
+    public function index(array $filters = []): array
     {
+        $search = trim((string) ($filters['search'] ?? ''));
         $users = array_map(function (array $user): array {
             unset($user['password_hash']);
             return $user;
-        }, $this->users->all());
-        return Response::success(['items' => $users]);
+        }, $this->users->all($search));
+        return Response::success(['items' => $users, 'total' => count($users)]);
     }
 
     public function create(array $payload, int $actorUserId = 0, array $actor = []): array
@@ -37,6 +38,7 @@ final class UserService
         $user = $this->users->create([
             'username' => $payload['username'],
             'email' => $payload['email'],
+            'celular' => $payload['celular'] ?? '',
             'password_hash' => $this->hasher->hash($payload['password']),
             'role' => $payload['role'] ?? 'operador',
             'is_active' => (bool) ($payload['is_active'] ?? true),
@@ -54,12 +56,15 @@ final class UserService
             return Response::error('No autorizado', 403);
         }
         $changes = [];
-        foreach (['email', 'role', 'is_active', 'must_change_password'] as $field) {
+        foreach (['email', 'celular', 'role', 'is_active', 'must_change_password'] as $field) {
             if (array_key_exists($field, $payload)) {
                 $changes[$field] = $field === 'email'
                     ? strtolower(trim((string) $payload[$field]))
                     : $payload[$field];
             }
+        }
+        if (array_key_exists('password', $payload) && trim((string) $payload['password']) !== '') {
+            $changes['password_hash'] = $this->hasher->hash((string) $payload['password']);
         }
         if ($changes === []) {
             return Response::error('Sin cambios', 422);
@@ -73,17 +78,23 @@ final class UserService
         return Response::success(['item' => $user]);
     }
 
-    public function disable(int $userId, int $actorUserId = 0, array $actor = []): array
+    public function delete(int $userId, int $actorUserId = 0, array $actor = []): array
     {
         if (!$this->policy->canManage($actor)) {
             return Response::error('No autorizado', 403);
         }
-        $user = $this->users->update($userId, ['is_active' => false]);
-        if (!$user) {
+        if ($actorUserId !== 0 && $actorUserId === $userId) {
+            return Response::error('No puedes eliminar tu propio usuario', 422);
+        }
+        $user = $this->users->find($userId);
+        if ($user === null) {
             return Response::error('Usuario no encontrado', 404);
         }
+        if (!$this->users->delete($userId)) {
+            return Response::error('No se pudo eliminar usuario', 500);
+        }
         $this->sessions->revokeAllForUser($userId);
-        $this->audit->log('USER_DISABLED', 'user', $userId, [], $actorUserId ?: null);
+        $this->audit->log('USER_DELETED', 'user', $userId, ['username' => $user['username']], $actorUserId ?: null);
         unset($user['password_hash']);
         return Response::success(['item' => $user]);
     }

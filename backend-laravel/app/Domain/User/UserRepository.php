@@ -7,9 +7,18 @@ final class UserRepository
 {
     public function __construct(private Database $db) {}
 
-    public function all(): array
+    public function all(string $search = ''): array
     {
-        return array_map([$this, 'map'], $this->db->select('users', [], [], ['username ASC', 'id ASC']));
+        $needle = trim($search);
+        $conditions = [];
+        $params = [];
+
+        if ($needle !== '') {
+            $conditions[] = '(LOWER(username) LIKE :search OR LOWER(email) LIKE :search OR LOWER(celular) LIKE :search OR LOWER(role) LIKE :search)';
+            $params['search'] = '%' . strtolower($needle) . '%';
+        }
+
+        return array_map([$this, 'map'], $this->db->select('users', $conditions, $params, ['username ASC', 'id ASC']));
     }
 
     public function find(int $id): ?array
@@ -30,6 +39,7 @@ final class UserRepository
         return $this->map($this->db->insert('users', [
             'username' => trim((string) $data['username']),
             'email' => strtolower(trim((string) $data['email'])),
+            'celular' => trim((string) ($data['celular'] ?? '')),
             'password_hash' => $data['password_hash'],
             'role' => $data['role'] ?? 'operador',
             'is_active' => (bool) ($data['is_active'] ?? true),
@@ -44,10 +54,18 @@ final class UserRepository
         if (array_key_exists('email', $changes)) {
             $changes['email'] = strtolower(trim((string) $changes['email']));
         }
+        if (array_key_exists('celular', $changes)) {
+            $changes['celular'] = trim((string) $changes['celular']);
+        }
         $changes['updated_at'] = gmdate('c');
 
         $updated = $this->db->updateById('users', $id, $changes);
         return $updated ? $this->map($updated) : null;
+    }
+
+    public function delete(int $id): bool
+    {
+        return $this->db->deleteById('users', $id);
     }
 
     private function map(array $row): array

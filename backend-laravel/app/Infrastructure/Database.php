@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(190) NOT NULL UNIQUE,
+    celular VARCHAR(60) NOT NULL DEFAULT '',
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(30) NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -26,6 +27,7 @@ SQL,
                 'id' => 'int',
                 'username' => 'string',
                 'email' => 'string',
+                'celular' => 'string',
                 'password_hash' => 'string',
                 'role' => 'string',
                 'is_active' => 'bool',
@@ -33,9 +35,14 @@ SQL,
                 'created_at' => 'string',
                 'updated_at' => 'string',
             ],
+            'alter' => [
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS celular VARCHAR(60) NOT NULL DEFAULT ''",
+            ],
             'indexes' => [
                 'CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)',
                 'CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active)',
+                'CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)',
+                'CREATE INDEX IF NOT EXISTS idx_users_celular ON users(celular)',
             ],
         ],
         'sessions' => [
@@ -231,6 +238,9 @@ SQL,
         }
 
         $this->pdo->exec($definition['ddl']);
+        foreach ($definition['alter'] ?? [] as $alterSql) {
+            $this->pdo->exec($alterSql);
+        }
         foreach ($definition['indexes'] as $indexSql) {
             $this->pdo->exec($indexSql);
         }
@@ -382,6 +392,32 @@ SQL,
         $statement->execute();
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC) ?: [];
         return array_map(fn(array $row): array => $this->deserializeRow($table, $row), $rows);
+    }
+
+    public function deleteById(string $table, int $id): bool
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        return $this->deleteManyBy($table, ['id = :id'], ['id' => $id]) > 0;
+    }
+
+    public function deleteManyBy(string $table, array $conditions, array $params = []): int
+    {
+        $this->ensureTable($table);
+        $sql = 'DELETE FROM ' . $this->quoteIdentifier($table);
+        if ($conditions !== []) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
+
+        $statement = $this->pdo->prepare($sql);
+        foreach ($params as $name => $value) {
+            $this->bindDynamicValue($statement, (string) $name, $value);
+        }
+
+        $statement->execute();
+        return $statement->rowCount();
     }
 
     private function serializeRow(string $table, array $row): array

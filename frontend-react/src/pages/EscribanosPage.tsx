@@ -34,7 +34,7 @@ export function EscribanosPage() {
 
   return (
     <div>
-      <PageHeader title="Escribanos" subtitle="Listado operativo con persistencia real en SQLite" />
+      <PageHeader title='Escribanos' subtitle='Listado operativo con persistencia real en SQLite' />
       <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 16 }}>
         <section style={{ background: '#fff', border: '1px solid #d8e1eb', borderRadius: 14, padding: 16 }}>
           <h3 style={{ marginTop: 0 }}>Nuevo escribano</h3>

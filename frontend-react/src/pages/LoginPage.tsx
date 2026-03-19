@@ -25,7 +25,7 @@ export function LoginPage() {
       login(data.token, data.user)
       navigate('/')
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'No se pudo iniciar sesiÃ³n')
+      setError(e instanceof Error ? e.message : 'No se pudo iniciar sesión')
     } finally {
       setLoading(false)
     }
@@ -44,16 +44,16 @@ export function LoginPage() {
           boxShadow: '0 18px 40px rgba(91, 111, 46, 0.14)',
         }}
       >
-        <PageHeader title="Acceso LeDi" subtitle="Inicio de sesiÃ³n contra API ejecutable" />
+        <PageHeader title='Acceso LeDi' subtitle='Inicio de sesión contra API ejecutable' />
         <label>Usuario</label>
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           style={{ width: '100%', padding: 10, marginTop: 6, marginBottom: 14, borderRadius: 10, border: `1px solid ${lediTheme.border}`, background: '#fffef6' }}
         />
-        <label>ContraseÃ±a</label>
+        <label>Contraseña</label>
         <input
-          type="password"
+          type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{ width: '100%', padding: 10, marginTop: 6, marginBottom: 14, borderRadius: 10, border: `1px solid ${lediTheme.border}`, background: '#fffef6' }}

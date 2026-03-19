@@ -18,6 +18,7 @@ $controllers = $app['controllers'];
 $createdAdmin = $controllers['users']->store([
     'username' => 'admin',
     'email' => 'admin@ledi.local',
+    'celular' => '3804000000',
     'password' => 'Admin.1234',
     'role' => 'admin',
 ]);
@@ -30,6 +31,7 @@ $actorId = $createdAdmin['data']['item']['id'];
 $user = $controllers['users']->store([
     'username' => 'operador1',
     'email' => 'operador1@ledi.local',
+    'celular' => '3804123456',
     'password' => 'Operador.1234',
     'role' => 'operador',
     'actor_user_id' => $actorId,
@@ -37,7 +39,7 @@ $user = $controllers['users']->store([
 ]);
 assertTrue($user['status'] === 201, 'crear operador');
 
-$list = $controllers['users']->index();
+$list = $controllers['users']->index(['search' => '3804']);
 assertTrue(count($list['data']['items']) === 2, 'listar usuarios');
 
 $escribano = $controllers['escribanos']->store([
@@ -83,14 +85,22 @@ $download = $controllers['adjuntos']->download([
 ]);
 assertTrue($download['data']['content'] === '%PDF-1.4 contenido simulado', 'descargar adjunto');
 
-$updatedUser = $controllers['users']->update(['user_id' => $user['data']['item']['id'], 'email' => 'nuevo@ledi.local', 'actor_user_id' => $actorId, '_actor' => ['id' => $actorId, 'role' => 'admin']]);
+$updatedUser = $controllers['users']->update([
+    'user_id' => $user['data']['item']['id'],
+    'email' => 'nuevo@ledi.local',
+    'celular' => '3804999999',
+    'password' => 'NuevaClave.123',
+    'actor_user_id' => $actorId,
+    '_actor' => ['id' => $actorId, 'role' => 'admin']
+]);
 assertTrue($updatedUser['data']['item']['email'] === 'nuevo@ledi.local', 'actualizar usuario');
+assertTrue($updatedUser['data']['item']['celular'] === '3804999999', 'actualizar celular usuario');
 
 $updatedEscribano = $controllers['escribanos']->update(['escribano_id' => $escribanoId, 'localidad' => 'Chilecito', 'actor_user_id' => $actorId, '_actor' => ['id' => $actorId, 'role' => 'admin']]);
 assertTrue($updatedEscribano['data']['item']['localidad'] === 'Chilecito', 'actualizar escribano');
 
-$disabled = $controllers['users']->disable(['user_id' => $user['data']['item']['id'], 'actor_user_id' => $actorId, '_actor' => ['id' => $actorId, 'role' => 'admin']]);
-assertTrue($disabled['ok'] === true && $disabled['data']['item']['is_active'] === false, 'bloquear usuario');
+$deleted = $controllers['users']->destroy(['user_id' => $user['data']['item']['id'], 'actor_user_id' => $actorId, '_actor' => ['id' => $actorId, 'role' => 'admin']]);
+assertTrue($deleted['ok'] === true && $deleted['data']['item']['username'] === 'operador1', 'eliminar usuario');
 
 assertTrue(count($app['audit']->all()) >= 5, 'auditoría registrada');
 

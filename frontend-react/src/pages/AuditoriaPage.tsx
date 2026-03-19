@@ -17,7 +17,7 @@ export function AuditoriaPage() {
 
   return (
     <div>
-      <PageHeader title="Auditoría" subtitle="Eventos clave del sistema y operaciones sensibles" />
+      <PageHeader title='Auditoría' subtitle='Eventos clave del sistema y operaciones sensibles' />
       {error ? <div style={{ color: '#b42318', marginBottom: 12 }}>{error}</div> : null}
       <AuditTable items={items} />
     </div>

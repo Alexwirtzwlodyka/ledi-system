@@ -71,9 +71,9 @@ export function AdjuntosPage() {
   const download = async (adjuntoId: number) => {
     try {
       setError('')
-      let payload: any = { adjunto_id: adjuntoId }
+      const payload: Record<string, unknown> = { adjunto_id: adjuntoId }
       if (user?.role === 'admin') {
-        const password = window.prompt('Ingrese su contraseÃ±a para step-up') ?? ''
+        const password = window.prompt('Ingrese su contraseña para step-up') ?? ''
         const step = await apiPost<{ step_up_token:string }>('/auth/step-up', { username: user.username, password })
         payload.step_up_token = step.step_up_token
       }
@@ -92,7 +92,7 @@ export function AdjuntosPage() {
         return
       }
 
-      window.alert(`Descarga lÃ³gica completada: ${file.filename}\n\n${file.content.substring(0, 80)}`)
+      window.alert(`Descarga lógica completada: ${file.filename}\n\n${file.content.substring(0, 80)}`)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'No se pudo descargar adjunto')
     }
@@ -100,7 +100,7 @@ export function AdjuntosPage() {
 
   return (
     <div>
-      <PageHeader title="Adjuntos" subtitle="GestiÃ³n documental con cifrado AES-256-GCM y step-up en descargas administrativas" />
+      <PageHeader title='Adjuntos' subtitle='Gestión documental con cifrado AES-256-GCM y step-up en descargas administrativas' />
       <div style={{ display: 'grid', gridTemplateColumns: '380px 1fr', gap: 16 }}>
         <section style={{ background: '#fff', border: '1px solid #d8e1eb', borderRadius: 14, padding: 16 }}>
           <h3 style={{ marginTop: 0 }}>Subir PDF</h3>
@@ -118,7 +118,7 @@ export function AdjuntosPage() {
             Buscar PDF
           </button>
           <div style={{ marginBottom: 10, color: '#5e718d' }}>
-            {selectedFile ? `Archivo seleccionado: ${selectedFile.name}` : 'Ningun archivo seleccionado'}
+            {selectedFile ? `Archivo seleccionado: ${selectedFile.name}` : 'Ningún archivo seleccionado'}
           </div>
           <button onClick={upload} disabled={!selectedFile || uploading}>
             {uploading ? 'Subiendo...' : 'Subir adjunto'}
@@ -126,10 +126,7 @@ export function AdjuntosPage() {
           {error ? <div style={{ color: '#b42318', marginTop: 10 }}>{error}</div> : null}
         </section>
         <section>
-          <AdjuntosList items={items} />
-          <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
-            {items.map((item) => <button key={item.id} onClick={() => download(item.id)} style={{ width: 'fit-content' }}>Descargar {item.nombre_original}</button>)}
-          </div>
+          <AdjuntosList items={items} onDownload={download} />
         </section>
       </div>
     </div>

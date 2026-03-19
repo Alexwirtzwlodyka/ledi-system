@@ -10,7 +10,7 @@ return [
         ['method' => 'GET', 'uri' => '/api/v1/users', 'handler' => ['users', 'index']],
         ['method' => 'POST', 'uri' => '/api/v1/users', 'handler' => ['users', 'store']],
         ['method' => 'PATCH', 'uri' => '/api/v1/users', 'handler' => ['users', 'update']],
-        ['method' => 'POST', 'uri' => '/api/v1/users/disable', 'handler' => ['users', 'disable']],
+        ['method' => 'POST', 'uri' => '/api/v1/users/delete', 'handler' => ['users', 'destroy']],
         ['method' => 'GET', 'uri' => '/api/v1/escribanos', 'handler' => ['escribanos', 'index']],
         ['method' => 'POST', 'uri' => '/api/v1/escribanos', 'handler' => ['escribanos', 'store']],
         ['method' => 'PATCH', 'uri' => '/api/v1/escribanos', 'handler' => ['escribanos', 'update']],
