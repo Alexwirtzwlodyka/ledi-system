@@ -1,5 +1,8 @@
 # LeDi System
 
+[![CI](https://github.com/Alexwirtzwlodyka/ledi-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Alexwirtzwlodyka/ledi-system/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 LeDi es un sistema web para la gestion de usuarios, escribanos, adjuntos PDF y auditoria operativa.
 
 El proyecto incluye:
@@ -27,6 +30,16 @@ El proyecto incluye:
 - carga y descarga de adjuntos PDF
 - auditoria de eventos sensibles
 - despliegue portable para Ubuntu
+
+## Capturas
+
+### Login
+
+![Login de LeDi](docs/assets/screenshots/login.png)
+
+### Vista autenticada
+
+![Vista autenticada de LeDi](docs/assets/screenshots/dashboard.png)
 
 ## Ejecucion En Desarrollo
 
@@ -104,3 +117,5 @@ El repositorio ya incluye:
 - scripts de backup y restore
 - seed idempotente de datos demo
 - documentacion para usuario final y mantenimiento
+- licencia MIT
+- workflow de CI para `main` y pull requests
