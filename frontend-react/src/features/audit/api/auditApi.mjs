@@ -1,0 +1,1 @@
+export function buildAuditListRequest(filters={}){ const params=new URLSearchParams(); if((filters.action||'').trim()) params.set('action', String(filters.action).trim()); if((filters.target_type||'').trim()) params.set('target_type', String(filters.target_type).trim()); const q=params.toString(); return {method:'GET', url:q?`/audit?${q}`:'/audit'} }

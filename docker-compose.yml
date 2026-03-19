@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ledi
+      POSTGRES_USER: ledi
+      POSTGRES_PASSWORD: ledi_secret
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ledi -d ledi"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  backend:
+    build:
+      context: ./backend-laravel
+      dockerfile: Dockerfile
+    working_dir: /var/www/app
+    command: sh -c "php bin/migrate.php && php bin/seed.php && php-fpm"
+    environment:
+      APP_ENV: docker
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ledi
+      DB_USERNAME: ledi
+      DB_PASSWORD: ledi_secret
+      DB_SCHEMA: ledi_app
+    volumes:
+      - ./backend-laravel:/var/www/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+  frontend:
+    image: node:22
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ./frontend-react:/app
+    ports: ["5173:5173"]
+    depends_on: [backend]
+  nginx:
+    image: nginx:1.27
+    ports: ["8080:80"]
+    volumes:
+      - ./ops/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend-laravel:/var/www/app:ro
+    depends_on: [backend, frontend]

@@ -1,0 +1,2 @@
+export function buildLoginRequest(payload){return {method:'POST',url:'/auth/login',body:{username:String(payload.username??'').trim().toLowerCase(),password:String(payload.password??''),otp:payload.otp?String(payload.otp).trim():undefined}}}
+export function buildStepUpRequest(payload){return {method:'POST',url:'/auth/step-up',body:{username:String(payload.username??'').trim().toLowerCase(),password:String(payload.password??'')}}}

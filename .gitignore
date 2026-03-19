@@ -1,0 +1,12 @@
+node_modules/
+vendor/
+.env
+dist/
+build/
+coverage/
+.phpunit.result.cache
+backups/
+*.zip
+.DS_Store
+.idea/
+.vscode/
