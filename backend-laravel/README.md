@@ -1,16 +1,19 @@
 # RUELL Backend ejecutable
 
-Base API ejecutable en PHP sobre PostgreSQL, con estructura Laravel-oriented.
+Base API ejecutable en PHP sobre PostgreSQL, con estructura Laravel-oriented liviana.
 
-## Qué incluye
+## Que Incluye
+
 - login, logout y sesiones
 - usuarios y roles
 - escribanos con filtros
 - adjuntos PDF cifrados
-- auditoría
+- libros PDF por registro
+- auditoria
 - step-up para descargas sensibles
 
-## Arranque rápido
+## Arranque Rapido
+
 ```bash
 php bin/migrate.php
 php bin/seed.php
@@ -29,11 +32,13 @@ DB_PASSWORD=ruell_secret
 DB_SCHEMA=ruell_app
 ```
 
-## Credenciales demo
-- admin / Admin.1234
-- operador1 / Operador.1234
+## Credenciales Demo
+
+- `admin / Admin.1234`
+- `operador1 / Operador.1234`
 
 ## Tests
+
 ```bash
 php tests/run_project_tests.php
 php tests/run_http_router_tests.php

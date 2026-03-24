@@ -9,6 +9,11 @@ RUELL esta compuesto por una SPA React y una API PHP con almacenamiento en Postg
 - `postgres`: persistencia relacional
 - `nginx`: publicacion del frontend y proxy hacia la API
 
+## Repositorio
+
+- repositorio principal: `https://github.com/Alexwirtzwlodyka/ruell-system`
+- rama activa de referencia: `main`
+
 ## Backend Real
 
 El backend no depende de Laravel completo ni de Sanctum.
@@ -29,6 +34,14 @@ La implementacion actual usa:
 - `Adjunto`
 - `Libro`
 - `Common` para respuestas, router y auditoria
+
+## Persistencia
+
+Configuracion por defecto observada:
+
+- base de datos: `ruell`
+- usuario: `ruell`
+- esquema: `ruell_app`
 
 ## Frontend Real
 

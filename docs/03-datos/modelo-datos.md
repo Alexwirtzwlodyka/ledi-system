@@ -1,5 +1,11 @@
 # Modelo De Datos
 
+## Configuracion Base
+
+- motor: `PostgreSQL 16`
+- base de datos por defecto: `ruell`
+- esquema principal por defecto: `ruell_app`
+
 ## Tablas Observadas En La Implementacion Actual
 
 - `users`

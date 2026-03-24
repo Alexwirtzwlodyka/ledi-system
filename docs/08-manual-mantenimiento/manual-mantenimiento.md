@@ -17,6 +17,10 @@ Archivo principal:
 
 - `docker-compose.prod.yml`
 
+Repositorio esperado:
+
+- `https://github.com/Alexwirtzwlodyka/ruell-system`
+
 ## Requisitos
 
 - Ubuntu 22.04 o compatible
@@ -25,7 +29,7 @@ Archivo principal:
 
 ## Despliegue Inicial
 
-1. Copiar el proyecto al servidor.
+1. Clonar o copiar el proyecto en el servidor.
 2. Entrar a la carpeta raiz.
 3. Ejecutar:
 
@@ -50,6 +54,13 @@ http://IP_DEL_SERVIDOR:8081
 - `postgres`: base de datos PostgreSQL
 - `backend`: API del sistema
 - `nginx`: frontend compilado y proxy hacia la API
+
+## Parametros Operativos Por Defecto
+
+- base de datos: `ruell`
+- usuario PostgreSQL: `ruell`
+- esquema principal: `ruell_app`
+- volumen persistente: `ruell_postgres_data`
 
 ## Credenciales Iniciales
 
@@ -170,7 +181,7 @@ El restore:
 
 ## Actualizacion Del Sistema
 
-1. Reemplazar archivos del proyecto.
+1. Actualizar el working tree desde `main` o desplegar una nueva version del repositorio.
 2. Reconstruir:
 
 ```bash

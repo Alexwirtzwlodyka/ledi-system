@@ -1,13 +1,13 @@
 # RUELL System
 
-[![CI](https://github.com/Alexwirtzwlodyka/ledi-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Alexwirtzwlodyka/ledi-system/actions/workflows/ci.yml)
+[![CI](https://github.com/Alexwirtzwlodyka/ruell-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Alexwirtzwlodyka/ruell-system/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 RUELL es un sistema web para la gestion de usuarios, escribanos, libros PDF, adjuntos PDF y auditoria operativa.
 
 ## Estado Actual
 
-Estado relevado sobre el repositorio local al 24/03/2026.
+Estado relevado sobre el repositorio local al `24/03/2026`.
 
 - Frontend con rutas activas para `Dashboard`, `Escribanos`, `Usuarios`, `Libros`, `Adjuntos` y `Auditoria`
 - API disponible bajo `/api/v1` con endpoints para autenticacion, usuarios, escribanos, libros, adjuntos y auditoria
@@ -21,6 +21,11 @@ Validacion realizada en este entorno:
 - `node frontend-react/tests/smoke.test.mjs`: OK
 - Backend no verificado por ejecucion local porque `php` no esta disponible en el `PATH`
 - Docker no verificado por ejecucion local porque `docker` no esta disponible en el `PATH`
+
+## Repositorio
+
+- GitHub: `https://github.com/Alexwirtzwlodyka/ruell-system`
+- Rama principal: `main`
 
 ## Stack
 
@@ -63,6 +68,12 @@ URLs esperadas:
 - App por Nginx: `http://localhost:8080`
 - API: `http://127.0.0.1:8080/api/v1`
 
+Variables principales del stack local:
+
+- base de datos: `ruell`
+- usuario PostgreSQL: `ruell`
+- esquema: `ruell_app`
+
 ## Ejecucion En Servidor Ubuntu
 
 ```bash
@@ -97,7 +108,10 @@ bash ops/restore-ruell.sh /ruta/al/backup/ruell.dump
 ## Documentacion
 
 - [Documentacion general](docs/README.md)
-- [Manual de usuario](docs/07-manual-usuario/manual-usuario.md)
+- [Arquitectura](docs/01-arquitectura/arquitectura.md)
+- [Modelo de datos](docs/03-datos/modelo-datos.md)
+- [Seguridad](docs/04-seguridad/seguridad.md)
+- [Despliegue](docs/06-despliegue/despliegue.md)
 - [Manual de mantenimiento](docs/08-manual-mantenimiento/manual-mantenimiento.md)
 - [Guia de entrega para profesor](ENTREGA-PROFESOR.md)
 
