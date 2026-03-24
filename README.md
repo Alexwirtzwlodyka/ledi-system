@@ -108,6 +108,7 @@ bash ops/restore-ruell.sh /ruta/al/backup/ruell.dump
 ## Documentacion
 
 - [Documentacion general](docs/README.md)
+- [Guia rapida para el equipo](docs/09-onboarding/guia-equipo.md)
 - [Arquitectura](docs/01-arquitectura/arquitectura.md)
 - [Modelo de datos](docs/03-datos/modelo-datos.md)
 - [Seguridad](docs/04-seguridad/seguridad.md)

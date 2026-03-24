@@ -12,6 +12,7 @@ Esta carpeta refleja el estado funcional y tecnico observado en el repositorio a
 - `06-despliegue/`: despliegue en desarrollo y produccion
 - `07-manual-usuario/`: uso funcional de la aplicacion
 - `08-manual-mantenimiento/`: operacion, respaldo y troubleshooting
+- `09-onboarding/`: guia corta para clonar, levantar y validar RUELL
 
 ## Estado De Verificacion
 
