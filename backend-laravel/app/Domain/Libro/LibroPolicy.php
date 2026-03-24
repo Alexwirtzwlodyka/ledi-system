@@ -1,14 +1,14 @@
 <?php
-namespace App\Domain\Escribano;
+namespace App\Domain\Libro;
 
-final class EscribanoPolicy
+final class LibroPolicy
 {
-    public function canCreate(array $actor): bool
+    public function canUpload(array $actor): bool
     {
         return in_array(($actor['role'] ?? 'consulta'), ['admin', 'operador'], true);
     }
 
-    public function canEdit(array $actor): bool
+    public function requiresStepUpForDownload(array $actor): bool
     {
         return ($actor['role'] ?? 'consulta') === 'admin';
     }

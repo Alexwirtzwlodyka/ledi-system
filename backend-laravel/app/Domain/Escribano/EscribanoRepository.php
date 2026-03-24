@@ -7,6 +7,17 @@ final class EscribanoRepository
 {
     public function __construct(private Database $db) {}
 
+    public function findByDni(string $dni): ?array
+    {
+        $normalizedDni = preg_replace('/\D+/', '', $dni);
+        if ($normalizedDni === '') {
+            return null;
+        }
+
+        $row = $this->db->firstBy('escribanos', ['dni = :dni'], ['dni' => $normalizedDni]);
+        return $row ? $this->map($row) : null;
+    }
+
     public function all(array $filters = []): array
     {
         $search = strtolower(trim((string) ($filters['search'] ?? '')));
@@ -67,9 +78,22 @@ final class EscribanoRepository
             'tipo_escribano' => $data['tipo_escribano'] ?? 'titular',
             'telefono' => trim((string) ($data['telefono'] ?? '')),
             'email' => strtolower(trim((string) ($data['email'] ?? ''))),
+            'email_personal' => strtolower(trim((string) ($data['email_personal'] ?? ''))),
+            'email_laboral' => strtolower(trim((string) ($data['email_laboral'] ?? ''))),
             'direccion' => trim((string) ($data['direccion'] ?? '')),
+            'direccion_domicilio' => trim((string) ($data['direccion_domicilio'] ?? '')),
+            'direccion_estudio' => trim((string) ($data['direccion_estudio'] ?? '')),
+            'direccion_domicilio_calle' => trim((string) ($data['direccion_domicilio_calle'] ?? '')),
+            'direccion_domicilio_numeracion' => trim((string) ($data['direccion_domicilio_numeracion'] ?? '')),
+            'direccion_domicilio_barrio' => trim((string) ($data['direccion_domicilio_barrio'] ?? '')),
+            'direccion_estudio_calle' => trim((string) ($data['direccion_estudio_calle'] ?? '')),
+            'direccion_estudio_numeracion' => trim((string) ($data['direccion_estudio_numeracion'] ?? '')),
+            'direccion_estudio_barrio' => trim((string) ($data['direccion_estudio_barrio'] ?? '')),
             'localidad' => trim((string) ($data['localidad'] ?? '')),
             'provincia' => trim((string) ($data['provincia'] ?? '')),
+            'fecha_nacimiento' => trim((string) ($data['fecha_nacimiento'] ?? '')),
+            'fecha_egresado' => trim((string) ($data['fecha_egresado'] ?? '')),
+            'fecha_matriculado' => trim((string) ($data['fecha_matriculado'] ?? '')),
             'estado' => $data['estado'] ?? 'activo',
             'observaciones' => trim((string) ($data['observaciones'] ?? '')),
             'created_at' => gmdate('c'),
@@ -84,6 +108,34 @@ final class EscribanoRepository
         }
         if (array_key_exists('email', $changes)) {
             $changes['email'] = strtolower(trim((string) $changes['email']));
+        }
+        foreach (['email_personal', 'email_laboral'] as $field) {
+            if (array_key_exists($field, $changes)) {
+                $changes[$field] = strtolower(trim((string) $changes[$field]));
+            }
+        }
+        foreach ([
+            'telefono',
+            'direccion',
+            'direccion_domicilio',
+            'direccion_estudio',
+            'direccion_domicilio_calle',
+            'direccion_domicilio_numeracion',
+            'direccion_domicilio_barrio',
+            'direccion_estudio_calle',
+            'direccion_estudio_numeracion',
+            'direccion_estudio_barrio',
+            'localidad',
+            'provincia',
+            'fecha_nacimiento',
+            'fecha_egresado',
+            'fecha_matriculado',
+            'estado',
+            'observaciones',
+        ] as $field) {
+            if (array_key_exists($field, $changes)) {
+                $changes[$field] = trim((string) $changes[$field]);
+            }
         }
         $changes['updated_at'] = gmdate('c');
 

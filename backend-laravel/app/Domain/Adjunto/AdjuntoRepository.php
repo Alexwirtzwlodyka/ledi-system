@@ -44,6 +44,12 @@ final class AdjuntoRepository
         ));
     }
 
+    public function update(int $id, array $changes): ?array
+    {
+        $updated = $this->db->updateById('adjuntos', $id, $changes);
+        return $updated ? $this->map($updated) : null;
+    }
+
     private function map(array $row): array
     {
         $row['id'] = (int) $row['id'];

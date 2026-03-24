@@ -7,6 +7,7 @@ import { UsuariosPage } from './pages/UsuariosPage'
 import { AdjuntosPage } from './pages/AdjuntosPage'
 import { AuthProvider } from './features/auth/context/AuthContext'
 import { AuditoriaPage } from './pages/AuditoriaPage'
+import { LibrosPage } from './pages/LibrosPage'
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
           <Route path='/' element={<DashboardPage />} />
           <Route path='/escribanos' element={<EscribanosPage />} />
           <Route path='/usuarios' element={<UsuariosPage />} />
+          <Route path='/libros' element={<LibrosPage />} />
           <Route path='/adjuntos' element={<AdjuntosPage />} />
           <Route path='/auditoria' element={<AuditoriaPage />} />
         </Route>

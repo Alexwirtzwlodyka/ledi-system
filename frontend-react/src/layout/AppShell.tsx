@@ -1,11 +1,12 @@
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../features/auth/context/AuthContext'
-import { lediTheme } from '../theme'
+import { ruellTheme } from '../theme'
 
 const links = [
   ['/', 'Dashboard'],
   ['/escribanos', 'Escribanos'],
+  ['/libros', 'Libros'],
   ['/adjuntos', 'Adjuntos'],
   ['/auditoria', 'Auditoría'],
   ['/usuarios', 'Usuarios'],
@@ -34,19 +35,19 @@ export function AppShell() {
   if (!user) return <Navigate to='/login' replace />
 
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr', background: lediTheme.background }}>
+    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr', background: ruellTheme.background }}>
       <aside
         style={{
           position: 'relative',
-          borderRight: `1px solid ${lediTheme.border}`,
+          borderRight: `1px solid ${ruellTheme.border}`,
           padding: 20,
-          background: lediTheme.surfaceAlt,
+          background: ruellTheme.surfaceAlt,
           boxShadow: '0 0 24px rgba(91, 111, 46, 0.08)',
           overflow: 'hidden',
         }}
       >
-        <h2 style={{ color: lediTheme.title, marginTop: 0 }}>LeDi</h2>
-        <div style={{ color: lediTheme.textMuted, marginBottom: 20 }}>{user.username} · {user.role}</div>
+        <h2 style={{ color: ruellTheme.title, marginTop: 0 }}>RUELL</h2>
+        <div style={{ color: ruellTheme.textMuted, marginBottom: 20 }}>{user.username} · {user.role}</div>
         <nav style={{ display: 'grid', gap: 10 }}>
           {links.map(([to, label], index) => {
             const isHovered = hoveredLink === to
@@ -58,11 +59,11 @@ export function AppShell() {
                 onMouseEnter={() => setHoveredLink(to)}
                 onMouseLeave={() => setHoveredLink(null)}
                 style={{
-                  color: lediTheme.link,
+                  color: ruellTheme.link,
                   textDecoration: 'none',
                   fontWeight: 700,
-                  background: lediTheme.surface,
-                  border: `1px solid ${lediTheme.border}`,
+                  background: ruellTheme.surface,
+                  border: `1px solid ${ruellTheme.border}`,
                   borderRadius: 12,
                   padding: '12px 14px',
                   boxShadow: '0 4px 0 rgba(91, 111, 46, 0.18), 0 10px 18px rgba(91, 111, 46, 0.08)',
@@ -91,9 +92,9 @@ export function AppShell() {
             marginTop: 24,
             padding: '10px 14px',
             borderRadius: 10,
-            border: `1px solid ${lediTheme.border}`,
-            background: lediTheme.surface,
-            color: lediTheme.title,
+            border: `1px solid ${ruellTheme.border}`,
+            background: ruellTheme.surface,
+            color: ruellTheme.title,
             cursor: isLoggingOut ? 'default' : 'pointer',
             boxShadow: '0 4px 0 rgba(91, 111, 46, 0.18), 0 10px 18px rgba(91, 111, 46, 0.08)',
             transform: isLoggingOut ? 'translateY(620px)' : 'translateY(0)',
@@ -127,17 +128,17 @@ export function AppShell() {
             style={{
               width: '100%',
               maxWidth: 340,
-              background: lediTheme.surface,
-              border: `1px solid ${lediTheme.border}`,
+              background: ruellTheme.surface,
+              border: `1px solid ${ruellTheme.border}`,
               borderRadius: 18,
               padding: 20,
               boxShadow: '0 24px 40px rgba(45, 55, 24, 0.22)',
               textAlign: 'center',
             }}
           >
-            <div style={{ color: lediTheme.title, fontWeight: 700, marginBottom: 10, fontSize: 18 }}>Confirmar salida</div>
-            <div style={{ color: lediTheme.textMuted, fontSize: 16, fontWeight: 700, lineHeight: 1.45, marginBottom: 18 }}>
-              Usted está saliendo de LeDi
+            <div style={{ color: ruellTheme.title, fontWeight: 700, marginBottom: 10, fontSize: 18 }}>Confirmar salida</div>
+            <div style={{ color: ruellTheme.textMuted, fontSize: 16, fontWeight: 700, lineHeight: 1.45, marginBottom: 18 }}>
+              Usted está saliendo de RUELL
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button
@@ -150,9 +151,9 @@ export function AppShell() {
                   flex: 1,
                   padding: '10px 12px',
                   borderRadius: 10,
-                  border: `1px solid ${lediTheme.border}`,
+                  border: `1px solid ${ruellTheme.border}`,
                   background: '#f6e5b8',
-                  color: lediTheme.title,
+                  color: ruellTheme.title,
                   cursor: 'pointer',
                 }}
               >
@@ -165,9 +166,9 @@ export function AppShell() {
                   flex: 1,
                   padding: '10px 12px',
                   borderRadius: 10,
-                  border: `1px solid ${lediTheme.border}`,
+                  border: `1px solid ${ruellTheme.border}`,
                   background: '#fff',
-                  color: lediTheme.textMuted,
+                  color: ruellTheme.textMuted,
                   cursor: 'pointer',
                 }}
               >

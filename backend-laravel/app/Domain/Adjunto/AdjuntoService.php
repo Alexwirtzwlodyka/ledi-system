@@ -61,6 +61,44 @@ final class AdjuntoService
         return Response::success(['items' => $items, 'total' => count($items)]);
     }
 
+    public function update(int $adjuntoId, string $fileName, string $content, string $contentEncoding = 'plain', int $actorUserId = 0, array $actor = []): array
+    {
+        if (!$this->policy->canUpload($actor)) {
+            return Response::error('No autorizado', 403);
+        }
+
+        $item = $this->repo->find($adjuntoId);
+        if (!$item) {
+            return Response::error('Adjunto no encontrado', 404);
+        }
+        if (!str_ends_with(strtolower($fileName), '.pdf')) {
+            return Response::error('Solo se permiten PDFs', 422);
+        }
+
+        $binaryContent = $this->decodeContent($content, $contentEncoding);
+        if ($binaryContent === '') {
+            return Response::error('El adjunto esta vacio o es invalido', 422);
+        }
+
+        $encrypted = $this->crypto->encrypt($binaryContent, $this->key, 'adjunto:' . $item['escribano_id']);
+        $updated = $this->repo->update($adjuntoId, [
+            'nombre_original' => $fileName,
+            'mime_type' => 'application/pdf',
+            'tamano_bytes' => strlen($binaryContent),
+            'checksum_sha256' => hash('sha256', $binaryContent),
+            'ciphertext' => $encrypted['ciphertext'],
+            'nonce' => $encrypted['nonce'],
+            'tag' => $encrypted['tag'],
+            'key_version' => 1,
+        ]);
+        if (!$updated) {
+            return Response::error('Adjunto no encontrado', 404);
+        }
+
+        $this->audit->log('ADJUNTO_UPDATED', 'adjunto', $adjuntoId, ['escribano_id' => $item['escribano_id'], 'filename' => $fileName], $actorUserId ?: null);
+        return Response::success(['item' => $updated]);
+    }
+
     public function download(int $adjuntoId, int $actorUserId = 0, array $actor = [], string $stepUpToken = '', string $ip = '127.0.0.1', string $userAgent = 'cli'): array
     {
         $item = $this->repo->find($adjuntoId);

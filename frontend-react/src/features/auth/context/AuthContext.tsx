@@ -11,8 +11,8 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
-const TOKEN_KEY = 'ledi.token'
-const USER_KEY = 'ledi.user'
+const TOKEN_KEY = 'ruell.token'
+const USER_KEY = 'ruell.user'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser>(null)

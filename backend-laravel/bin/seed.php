@@ -11,7 +11,7 @@ $admin = $app['users']->findByUsername('admin');
 if (!$admin) {
     $users->store([
         'username' => 'admin',
-        'email' => 'admin@ledi.local',
+        'email' => 'admin@ruell.local',
         'password' => 'Admin.1234',
         'role' => 'admin',
     ]);
@@ -21,7 +21,7 @@ $operador = $app['users']->findByUsername('operador1');
 if (!$operador) {
     $users->store([
         'username' => 'operador1',
-        'email' => 'operador1@ledi.local',
+        'email' => 'operador1@ruell.local',
         'password' => 'Operador.1234',
         'role' => 'operador',
     ]);

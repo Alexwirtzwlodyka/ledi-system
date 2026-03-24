@@ -14,6 +14,9 @@ use App\Domain\Common\Router;
 use App\Domain\Escribano\EscribanoPolicy;
 use App\Domain\Escribano\EscribanoRepository;
 use App\Domain\Escribano\EscribanoService;
+use App\Domain\Libro\LibroPolicy;
+use App\Domain\Libro\LibroRepository;
+use App\Domain\Libro\LibroService;
 use App\Domain\User\UserPolicy;
 use App\Domain\User\UserRepository;
 use App\Domain\User\UserService;
@@ -21,6 +24,7 @@ use App\Http\Controllers\Api\V1\AdjuntoController;
 use App\Http\Controllers\Api\V1\AuditController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\EscribanoController;
+use App\Http\Controllers\Api\V1\LibroController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Infrastructure\Database;
 use App\Infrastructure\Migrator;
@@ -37,16 +41,18 @@ final class AppFactory
         $sessions = new SessionManager($database);
         $escribanos = new EscribanoRepository($database);
         $adjuntos = new AdjuntoRepository($database);
+        $libros = new LibroRepository($database);
         $hasher = new PasswordHasher();
-        $key = hash('sha256', 'ledi-master-key', true);
+        $key = hash('sha256', 'ruell-master-key', true);
         $stepUp = new StepUpService($database);
-        $authService = new AuthService($users, $hasher, $sessions, $audit, new AuthRateLimiter(), $stepUp);
+        $authService = new AuthService($users, $escribanos, $hasher, $sessions, $audit, new AuthRateLimiter(), $stepUp);
 
         $controllers = [
             'auth' => new AuthController($authService),
-            'users' => new UserController(new UserService($users, $hasher, $sessions, $audit, new UserPolicy())),
+            'users' => new UserController(new UserService($users, $hasher, $sessions, $audit, new UserPolicy(), $escribanos)),
             'escribanos' => new EscribanoController(new EscribanoService($escribanos, $audit, new EscribanoPolicy())),
             'adjuntos' => new AdjuntoController(new AdjuntoService($adjuntos, $escribanos, new PdfCryptoService(), $audit, $key, new AdjuntoPolicy(), $authService)),
+            'libros' => new LibroController(new LibroService($libros, $escribanos, new PdfCryptoService(), $audit, $key, new LibroPolicy(), $authService)),
             'audit' => new AuditController($audit),
         ];
 
@@ -59,6 +65,7 @@ final class AppFactory
             'sessions' => $sessions,
             'escribanos' => $escribanos,
             'adjuntos' => $adjuntos,
+            'libros' => $libros,
             'controllers' => $controllers,
             'router' => new Router($routes, $controllers),
         ];

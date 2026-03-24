@@ -7,7 +7,7 @@ final class Migrator
 
     public function migrate(): void
     {
-        foreach (['users', 'escribanos', 'sessions', 'step_up_tokens', 'audit_logs', 'adjuntos'] as $table) {
+        foreach (['users', 'escribanos', 'sessions', 'step_up_tokens', 'audit_logs', 'adjuntos', 'libros'] as $table) {
             $this->db->ensureTable($table);
         }
     }

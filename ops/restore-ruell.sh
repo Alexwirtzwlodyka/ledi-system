@@ -8,7 +8,7 @@ if [[ "${EUID}" -ne 0 ]]; then
 fi
 
 if [[ $# -ne 1 ]]; then
-  echo "Uso: $0 /ruta/al/backup/ledi.dump" >&2
+  echo "Uso: $0 /ruta/al/backup/ruell.dump" >&2
   exit 1
 fi
 
@@ -25,9 +25,9 @@ cd "${ROOT_DIR}"
 ${SUDO} docker compose -f docker-compose.prod.yml up -d postgres backend nginx
 
 ${SUDO} docker compose -f docker-compose.prod.yml exec -T postgres \
-  psql -U ledi -d ledi -c "DROP SCHEMA IF EXISTS ledi_app CASCADE; CREATE SCHEMA ledi_app;"
+  psql -U ruell -d ruell -c "DROP SCHEMA IF EXISTS ruell_app CASCADE; CREATE SCHEMA ruell_app;"
 
 cat "${DUMP_FILE}" | ${SUDO} docker compose -f docker-compose.prod.yml exec -T postgres \
-  pg_restore -U ledi -d ledi --clean --if-exists --no-owner --no-privileges
+  pg_restore -U ruell -d ruell --clean --if-exists --no-owner --no-privileges
 
 echo "Restore completado desde ${DUMP_FILE}"

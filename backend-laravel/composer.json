@@ -1,5 +1,5 @@
 {
-  "name": "ledi/backend",
+  "name": "ruell/backend",
   "type": "project",
   "require": {
     "php": ">=8.1"

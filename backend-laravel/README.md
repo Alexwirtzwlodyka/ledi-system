@@ -1,4 +1,4 @@
-# LeDi Backend ejecutable
+# RUELL Backend ejecutable
 
 Base API ejecutable en PHP sobre PostgreSQL, con estructura Laravel-oriented.
 
@@ -23,10 +23,10 @@ Variables de entorno esperadas:
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
 DB_PORT=5432
-DB_DATABASE=ledi
-DB_USERNAME=ledi
-DB_PASSWORD=ledi_secret
-DB_SCHEMA=ledi_app
+DB_DATABASE=ruell
+DB_USERNAME=ruell
+DB_PASSWORD=ruell_secret
+DB_SCHEMA=ruell_app
 ```
 
 ## Credenciales demo

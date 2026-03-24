@@ -14,7 +14,20 @@ CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(190) NOT NULL UNIQUE,
+    dni VARCHAR(20) NOT NULL DEFAULT '',
     celular VARCHAR(60) NOT NULL DEFAULT '',
+    email_personal VARCHAR(190) NOT NULL DEFAULT '',
+    email_laboral VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_personal TEXT NOT NULL DEFAULT '',
+    direccion_laboral TEXT NOT NULL DEFAULT '',
+    direccion_personal_calle VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_personal_numeracion VARCHAR(60) NOT NULL DEFAULT '',
+    direccion_personal_barrio VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_laboral_calle VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_laboral_numeracion VARCHAR(60) NOT NULL DEFAULT '',
+    direccion_laboral_barrio VARCHAR(190) NOT NULL DEFAULT '',
+    escribano_id_vinculado BIGINT NULL,
+    registro_vinculado VARCHAR(60) NOT NULL DEFAULT '',
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(30) NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
@@ -27,7 +40,20 @@ SQL,
                 'id' => 'int',
                 'username' => 'string',
                 'email' => 'string',
+                'dni' => 'string',
                 'celular' => 'string',
+                'email_personal' => 'string',
+                'email_laboral' => 'string',
+                'direccion_personal' => 'string',
+                'direccion_laboral' => 'string',
+                'direccion_personal_calle' => 'string',
+                'direccion_personal_numeracion' => 'string',
+                'direccion_personal_barrio' => 'string',
+                'direccion_laboral_calle' => 'string',
+                'direccion_laboral_numeracion' => 'string',
+                'direccion_laboral_barrio' => 'string',
+                'escribano_id_vinculado' => 'int',
+                'registro_vinculado' => 'string',
                 'password_hash' => 'string',
                 'role' => 'string',
                 'is_active' => 'bool',
@@ -36,13 +62,29 @@ SQL,
                 'updated_at' => 'string',
             ],
             'alter' => [
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS dni VARCHAR(20) NOT NULL DEFAULT ''",
                 "ALTER TABLE users ADD COLUMN IF NOT EXISTS celular VARCHAR(60) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS email_personal VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS email_laboral VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_personal TEXT NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_laboral TEXT NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_personal_calle VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_personal_numeracion VARCHAR(60) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_personal_barrio VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_laboral_calle VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_laboral_numeracion VARCHAR(60) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS direccion_laboral_barrio VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS escribano_id_vinculado BIGINT NULL",
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS registro_vinculado VARCHAR(60) NOT NULL DEFAULT ''",
             ],
             'indexes' => [
                 'CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)',
                 'CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active)',
                 'CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)',
+                'CREATE INDEX IF NOT EXISTS idx_users_dni ON users(dni)',
                 'CREATE INDEX IF NOT EXISTS idx_users_celular ON users(celular)',
+                'CREATE INDEX IF NOT EXISTS idx_users_escribano_id_vinculado ON users(escribano_id_vinculado)',
+                'CREATE INDEX IF NOT EXISTS idx_users_registro_vinculado ON users(registro_vinculado)',
             ],
         ],
         'sessions' => [
@@ -138,9 +180,22 @@ CREATE TABLE IF NOT EXISTS escribanos (
     tipo_escribano VARCHAR(30) NOT NULL,
     telefono VARCHAR(60) NOT NULL DEFAULT '',
     email VARCHAR(190) NOT NULL DEFAULT '',
+    email_personal VARCHAR(190) NOT NULL DEFAULT '',
+    email_laboral VARCHAR(190) NOT NULL DEFAULT '',
     direccion TEXT NOT NULL DEFAULT '',
+    direccion_domicilio TEXT NOT NULL DEFAULT '',
+    direccion_estudio TEXT NOT NULL DEFAULT '',
+    direccion_domicilio_calle VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_domicilio_numeracion VARCHAR(60) NOT NULL DEFAULT '',
+    direccion_domicilio_barrio VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_estudio_calle VARCHAR(190) NOT NULL DEFAULT '',
+    direccion_estudio_numeracion VARCHAR(60) NOT NULL DEFAULT '',
+    direccion_estudio_barrio VARCHAR(190) NOT NULL DEFAULT '',
     localidad VARCHAR(120) NOT NULL DEFAULT '',
     provincia VARCHAR(120) NOT NULL DEFAULT '',
+    fecha_nacimiento TEXT NOT NULL DEFAULT '',
+    fecha_egresado TEXT NOT NULL DEFAULT '',
+    fecha_matriculado TEXT NOT NULL DEFAULT '',
     estado VARCHAR(30) NOT NULL DEFAULT 'activo',
     observaciones TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
@@ -157,13 +212,41 @@ SQL,
                 'tipo_escribano' => 'string',
                 'telefono' => 'string',
                 'email' => 'string',
+                'email_personal' => 'string',
+                'email_laboral' => 'string',
                 'direccion' => 'string',
+                'direccion_domicilio' => 'string',
+                'direccion_estudio' => 'string',
+                'direccion_domicilio_calle' => 'string',
+                'direccion_domicilio_numeracion' => 'string',
+                'direccion_domicilio_barrio' => 'string',
+                'direccion_estudio_calle' => 'string',
+                'direccion_estudio_numeracion' => 'string',
+                'direccion_estudio_barrio' => 'string',
                 'localidad' => 'string',
                 'provincia' => 'string',
+                'fecha_nacimiento' => 'string',
+                'fecha_egresado' => 'string',
+                'fecha_matriculado' => 'string',
                 'estado' => 'string',
                 'observaciones' => 'string',
                 'created_at' => 'string',
                 'updated_at' => 'string',
+            ],
+            'alter' => [
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS email_personal VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS email_laboral VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_domicilio TEXT NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_estudio TEXT NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_domicilio_calle VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_domicilio_numeracion VARCHAR(60) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_domicilio_barrio VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_estudio_calle VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_estudio_numeracion VARCHAR(60) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS direccion_estudio_barrio VARCHAR(190) NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS fecha_nacimiento TEXT NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS fecha_egresado TEXT NOT NULL DEFAULT ''",
+                "ALTER TABLE escribanos ADD COLUMN IF NOT EXISTS fecha_matriculado TEXT NOT NULL DEFAULT ''",
             ],
             'indexes' => [
                 'CREATE INDEX IF NOT EXISTS idx_escribanos_dni ON escribanos(dni)',
@@ -206,6 +289,42 @@ SQL,
                 'CREATE INDEX IF NOT EXISTS idx_adjuntos_checksum_sha256 ON adjuntos(checksum_sha256)',
             ],
         ],
+        'libros' => [
+            'ddl' => <<<'SQL'
+CREATE TABLE IF NOT EXISTS libros (
+    id BIGSERIAL PRIMARY KEY,
+    registro VARCHAR(60) NOT NULL,
+    descripcion TEXT NOT NULL DEFAULT '',
+    nombre_original VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(120) NOT NULL,
+    tamano_bytes BIGINT NOT NULL,
+    checksum_sha256 VARCHAR(64) NOT NULL,
+    ciphertext TEXT NOT NULL,
+    nonce TEXT NOT NULL,
+    tag TEXT NOT NULL,
+    key_version INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT NOT NULL
+)
+SQL,
+            'columns' => [
+                'id' => 'int',
+                'registro' => 'string',
+                'descripcion' => 'string',
+                'nombre_original' => 'string',
+                'mime_type' => 'string',
+                'tamano_bytes' => 'int',
+                'checksum_sha256' => 'string',
+                'ciphertext' => 'string',
+                'nonce' => 'string',
+                'tag' => 'string',
+                'key_version' => 'int',
+                'created_at' => 'string',
+            ],
+            'indexes' => [
+                'CREATE INDEX IF NOT EXISTS idx_libros_registro ON libros(registro)',
+                'CREATE INDEX IF NOT EXISTS idx_libros_checksum_sha256 ON libros(checksum_sha256)',
+            ],
+        ],
     ];
 
     private PDO $pdo;
@@ -225,7 +344,7 @@ SQL,
             'pgsql://%s:%s/%s?schema=%s',
             $this->config('DB_HOST', 'postgres'),
             $this->config('DB_PORT', '5432'),
-            $this->config('DB_DATABASE', 'ledi'),
+            $this->config('DB_DATABASE', 'ruell'),
             $this->schema
         );
     }
@@ -494,14 +613,14 @@ SQL,
             'pgsql:host=%s;port=%s;dbname=%s',
             $this->config('DB_HOST', 'postgres'),
             $this->config('DB_PORT', '5432'),
-            $this->config('DB_DATABASE', 'ledi')
+            $this->config('DB_DATABASE', 'ruell')
         );
 
         try {
             return new PDO(
                 $dsn,
-                $this->config('DB_USERNAME', 'ledi'),
-                $this->config('DB_PASSWORD', 'ledi_secret'),
+                $this->config('DB_USERNAME', 'ruell'),
+                $this->config('DB_PASSWORD', 'ruell_secret'),
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -526,15 +645,15 @@ SQL,
         }
 
         $name = basename(str_replace('\\', '/', rtrim($storagePath, '/\\')));
-        return $this->sanitizeIdentifier($name !== '' ? 'ledi_' . $name : 'ledi_app');
+        return $this->sanitizeIdentifier($name !== '' ? 'ruell_' . $name : 'ruell_app');
     }
 
     private function sanitizeIdentifier(string $value): string
     {
-        $clean = strtolower(preg_replace('/[^a-zA-Z0-9_]+/', '_', $value) ?? 'ledi_app');
+        $clean = strtolower(preg_replace('/[^a-zA-Z0-9_]+/', '_', $value) ?? 'ruell_app');
         $clean = trim($clean, '_');
         if ($clean === '' || ctype_digit($clean[0])) {
-            $clean = 'ledi_' . $clean;
+            $clean = 'ruell_' . $clean;
         }
 
         return substr($clean, 0, 63);

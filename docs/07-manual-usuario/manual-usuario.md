@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-LeDi es un sistema para gestionar usuarios, escribanos, adjuntos PDF y auditoria de operaciones sensibles.
+RUELL permite gestionar usuarios, escribanos, libros PDF, adjuntos PDF y auditoria de operaciones sensibles.
 
 ## Acceso Al Sistema
 
@@ -31,10 +31,11 @@ El panel principal muestra accesos directos a:
 - `Dashboard`
 - `Escribanos`
 - `Usuarios`
+- `Libros`
 - `Adjuntos`
 - `Auditoria`
 
-Tambien muestra el usuario autenticado y su rol.
+Tambien muestra el usuario autenticado, su rol y el resumen operativo del sistema.
 
 ## Gestion De Usuarios
 
@@ -44,14 +45,8 @@ Permite:
 
 - crear usuarios
 - asignar rol
+- vincular un usuario con un escribano
 - consultar usuarios existentes
-
-Campos del alta:
-
-- `Username`
-- `Email`
-- `Contrasena`
-- `Rol`
 
 Roles disponibles:
 
@@ -59,11 +54,9 @@ Roles disponibles:
 - `operador`
 - `consulta`
 
-Uso basico:
+Regla importante:
 
-1. Completar el formulario.
-2. Presionar `Crear usuario`.
-3. Verificar que el usuario aparezca en la tabla.
+- solo el rol `admin` puede dar de alta o administrar usuarios
 
 ## Gestion De Escribanos
 
@@ -74,20 +67,27 @@ Permite:
 - registrar nuevos escribanos
 - listar escribanos existentes
 - buscar por apellido, nombre, DNI o matricula
+- editar datos del escribano cuando el rol lo permite
 
-Campos principales:
+Reglas importantes:
 
-- `Apellido`
-- `Nombre`
-- `DNI`
-- `Matricula`
-- `Localidad`
+- `admin` y `operador` pueden crear escribanos
+- solo `admin` puede editarlos
 
-Uso basico:
+## Gestion De Libros
 
-1. Completar el formulario.
-2. Presionar `Crear escribano`.
-3. Usar el cuadro de busqueda para filtrar resultados.
+Pantalla: `Libros`
+
+Permite:
+
+- seleccionar un registro
+- cargar un PDF asociado al registro
+- listar libros cargados
+- descargar libros existentes
+
+Regla importante:
+
+- las descargas sensibles para `admin` pueden solicitar confirmacion adicional
 
 ## Gestion De Adjuntos
 
@@ -96,26 +96,21 @@ Pantalla: `Adjuntos`
 Permite:
 
 - seleccionar un escribano
-- subir un archivo PDF logico
+- subir un archivo PDF
 - listar adjuntos cargados
+- editar nombre o contenido del adjunto
 - descargar adjuntos
-
-Campos de carga:
-
-- `Escribano`
-- `Nombre de archivo`
-- `Contenido`
 
 ## Descarga Con Step-Up
 
-Cuando un usuario `admin` descarga un adjunto, el sistema solicita nuevamente la contrasena para confirmar la operacion.
+Cuando un usuario `admin` realiza una descarga sensible, el sistema puede solicitar nuevamente la contrasena para confirmar la operacion.
 
 Flujo:
 
 1. Presionar `Descargar`.
 2. Ingresar contrasena en la ventana emergente.
 3. Confirmar.
-4. El sistema devuelve el contenido del adjunto.
+4. El sistema devuelve el contenido del PDF.
 
 ## Auditoria
 
@@ -123,11 +118,11 @@ Pantalla: `Auditoria`
 
 Permite consultar eventos relevantes del sistema:
 
-- inicio de sesion exitoso
+- inicios de sesion exitosos
 - intentos fallidos de login
 - altas de usuarios
-- altas de escribanos
-- cargas de adjuntos
+- altas o cambios de escribanos
+- cargas y descargas sensibles de documentos
 
 ## Buenas Practicas De Uso
 
@@ -146,9 +141,9 @@ Permite consultar eventos relevantes del sistema:
 
 - volver a iniciar sesion
 
-`No se pudo subir adjunto`
+`No se pudo subir adjunto o libro`
 
-- verificar que el nombre termine en `.pdf`
+- verificar que el archivo corresponda a un PDF
 - comprobar conectividad con el servidor
 
 `Step-up requerido o invalido`

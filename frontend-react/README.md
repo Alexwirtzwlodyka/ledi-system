@@ -1,4 +1,4 @@
-# LeDi Frontend MVP
+# RUELL Frontend MVP
 
 SPA base en React + TypeScript.
 

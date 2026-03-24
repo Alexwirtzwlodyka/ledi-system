@@ -32,6 +32,11 @@ final class AuthController
         return $this->service->logout((string) ($payload['token'] ?? ''));
     }
 
+    public function active(array $payload = []): array
+    {
+        return $this->service->activePresence();
+    }
+
     public function resolveSession(string $token): ?array
     {
         return $this->service->resolveSession($token);

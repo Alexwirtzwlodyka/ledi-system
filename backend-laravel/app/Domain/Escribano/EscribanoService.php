@@ -16,7 +16,7 @@ final class EscribanoService
 
     public function create(array $payload, int $actorUserId = 0, array $actor = []): array
     {
-        if ($actorUserId !== 0 && !$this->policy->canWrite($actor)) {
+        if ($actorUserId !== 0 && !$this->policy->canCreate($actor)) {
             return Response::error('No autorizado', 403);
         }
         $required = ['apellido', 'nombre'];
@@ -25,6 +25,12 @@ final class EscribanoService
             if (trim((string) ($payload[$field] ?? '')) === '') {
                 $errors[$field] = 'Obligatorio';
             }
+        }
+        $dni = preg_replace('/\D+/', '', (string) ($payload['dni'] ?? ''));
+        if ($dni === '') {
+            $errors['dni'] = 'Obligatorio';
+        } elseif ($this->repo->findByDni($dni) !== null) {
+            $errors['dni'] = 'Ya existe un escribano con ese DNI';
         }
         if ($errors !== []) {
             return Response::error('Datos invalidos', 422, $errors);
@@ -36,11 +42,24 @@ final class EscribanoService
 
     public function update(int $id, array $payload, int $actorUserId = 0, array $actor = []): array
     {
-        if (!$this->policy->canWrite($actor)) {
+        if (!$this->policy->canEdit($actor)) {
             return Response::error('No autorizado', 403);
         }
         $changes = [];
-        foreach (['apellido', 'nombre', 'dni', 'matricula', 'registro', 'tipo_escribano', 'telefono', 'email', 'direccion', 'localidad', 'provincia', 'estado', 'observaciones'] as $field) {
+        foreach ([
+            'email_personal',
+            'email_laboral',
+            'telefono',
+            'direccion_domicilio',
+            'direccion_estudio',
+            'direccion_domicilio_calle',
+            'direccion_domicilio_numeracion',
+            'direccion_domicilio_barrio',
+            'direccion_estudio_calle',
+            'direccion_estudio_numeracion',
+            'direccion_estudio_barrio',
+            'localidad',
+        ] as $field) {
             if (array_key_exists($field, $payload)) {
                 $changes[$field] = is_string($payload[$field]) ? trim($payload[$field]) : $payload[$field];
             }

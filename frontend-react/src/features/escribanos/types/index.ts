@@ -6,6 +6,24 @@ export interface Escribano {
   matricula: string
   registro: string
   tipo_escribano?: string
+  telefono?: string
+  email?: string
+  email_personal?: string
+  email_laboral?: string
+  direccion?: string
+  direccion_domicilio?: string
+  direccion_estudio?: string
+  direccion_domicilio_calle?: string
+  direccion_domicilio_numeracion?: string
+  direccion_domicilio_barrio?: string
+  direccion_estudio_calle?: string
+  direccion_estudio_numeracion?: string
+  direccion_estudio_barrio?: string
   localidad?: string
+  provincia?: string
+  fecha_nacimiento?: string
+  fecha_egresado?: string
+  fecha_matriculado?: string
   estado?: string
+  observaciones?: string
 }

@@ -52,4 +52,9 @@ final class SessionManager
     {
         return $this->db->select('sessions', [], [], ['id DESC']);
     }
+
+    public function active(): array
+    {
+        return $this->db->select('sessions', ['revoked_at IS NULL'], [], ['id DESC']);
+    }
 }

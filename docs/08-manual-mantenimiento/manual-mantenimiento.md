@@ -2,14 +2,14 @@
 
 ## Objetivo
 
-Este documento describe como desplegar, operar, respaldar y mantener LeDi en un servidor Ubuntu.
+Este documento describe como desplegar, operar, respaldar y mantener RUELL en un servidor Ubuntu.
 
 ## Arquitectura Operativa
 
 El despliegue de produccion usa:
 
 - `nginx`
-- `backend` PHP-FPM
+- `backend` PHP
 - `postgres`
 - `docker compose`
 
@@ -110,16 +110,28 @@ El seed es idempotente para:
 
 ## Base De Datos
 
-La base usa PostgreSQL y el esquema principal es:
+La base usa PostgreSQL y el esquema principal por defecto es:
 
 ```text
-ledi_app
+ruell_app
 ```
 
-Consultas utiles:
+El backend crea y ajusta tablas al iniciar mediante su capa `Database`.
+
+Tablas principales:
+
+- `users`
+- `sessions`
+- `step_up_tokens`
+- `audit_logs`
+- `escribanos`
+- `adjuntos`
+- `libros`
+
+Consulta util:
 
 ```bash
-docker compose -f docker-compose.prod.yml exec -T postgres psql -U ledi -d ledi
+docker compose -f docker-compose.prod.yml exec -T postgres psql -U ruell -d ruell
 ```
 
 ## Backup
@@ -127,7 +139,7 @@ docker compose -f docker-compose.prod.yml exec -T postgres psql -U ledi -d ledi
 Script incluido:
 
 ```bash
-bash ops/backup-ledi.sh
+bash ops/backup-ruell.sh
 ```
 
 Resultado:
@@ -147,13 +159,13 @@ backups/YYYYMMDD-HHMMSS/
 Script incluido:
 
 ```bash
-bash ops/restore-ledi.sh /ruta/al/backup/ledi.dump
+bash ops/restore-ruell.sh /ruta/al/backup/ruell.dump
 ```
 
 El restore:
 
 - levanta el stack necesario
-- recrea el esquema `ledi_app`
+- recrea el esquema `ruell_app`
 - restaura el dump
 
 ## Actualizacion Del Sistema
@@ -194,10 +206,9 @@ docker compose -f docker-compose.prod.yml logs --tail=100 backend
 - verificar que el seed haya corrido
 - comprobar existencia del usuario en PostgreSQL
 
-`No sube adjuntos`
+`No sube adjuntos o libros`
 
-- verificar extension `.pdf`
-- revisar configuracion de `client_max_body_size` en Nginx
+- verificar extension o contenido esperado
 - revisar logs de `nginx` y `backend`
 
 `El backend arranca pero no responde`
@@ -211,12 +222,10 @@ docker compose -f docker-compose.prod.yml logs --tail=100 backend
 - ejecutar el script desde la raiz del proyecto
 - revisar permisos de Docker y espacio en disco
 
-## Archivos Clave
+## Estado De Verificacion De Esta Documentacion
 
-- `docker-compose.prod.yml`
-- `backend-laravel/Dockerfile.prod`
-- `backend-laravel/bin/seed.php`
-- `ops/nginx/Dockerfile.prod`
-- `ops/nginx/ledi.prod.conf`
-- `ops/backup-ledi.sh`
-- `ops/restore-ledi.sh`
+Relevado sobre el workspace actual al `24/03/2026`.
+
+- frontend validado con pruebas locales
+- backend sin ejecucion local por falta de `php` en el entorno
+- docker sin ejecucion local por falta de `docker` en el entorno

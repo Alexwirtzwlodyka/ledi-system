@@ -1,4 +1,4 @@
-export const lediTheme = {
+export const ruellTheme = {
   background: 'linear-gradient(135deg, #d9d88b 0%, #b7c76d 42%, #90a95b 100%)',
   surface: '#f7f3df',
   surfaceAlt: '#edf0cf',

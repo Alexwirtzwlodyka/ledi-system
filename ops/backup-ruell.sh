@@ -18,7 +18,7 @@ cd "${ROOT_DIR}"
 ${SUDO} docker compose -f docker-compose.prod.yml up -d postgres >/dev/null
 
 ${SUDO} docker compose -f docker-compose.prod.yml exec -T postgres \
-  pg_dump -U ledi -d ledi -Fc > "${TARGET_DIR}/ledi.dump"
+  pg_dump -U ruell -d ruell -Fc > "${TARGET_DIR}/ruell.dump"
 
 ${SUDO} docker compose -f docker-compose.prod.yml ps > "${TARGET_DIR}/compose-ps.txt"
 
@@ -27,14 +27,14 @@ tar -czf "${TARGET_DIR}/deploy-configs.tar.gz" \
   backend-laravel/Dockerfile.prod \
   backend-laravel/bin/seed.php \
   ops/nginx/Dockerfile.prod \
-  ops/nginx/ledi.prod.conf
+  ops/nginx/ruell.prod.conf
 
 cat <<EOF
 Backup creado en:
   ${TARGET_DIR}
 
 Archivos:
-  ledi.dump
+  ruell.dump
   compose-ps.txt
   deploy-configs.tar.gz
 EOF
